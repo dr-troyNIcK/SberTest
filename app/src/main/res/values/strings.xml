@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">Translator</string>
+    <string name="yandex_translator_api_key">
+        trnsl.1.1.20190727T114009Z.6bfbe740c373fb11.272de982f42d65b1018d9e1f5d272424ea5f8020
+    </string>
 </resources>

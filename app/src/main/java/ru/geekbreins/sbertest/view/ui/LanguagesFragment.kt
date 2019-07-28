@@ -9,20 +9,20 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import ru.geekbreins.sbertest.R
 import ru.geekbreins.sbertest.presenter.LanguagesListFragmentPresenter
-import ru.geekbreins.sbertest.view.LanguagesListFragmentView
+import ru.geekbreins.sbertest.view.LanguagesFragmentView
 
 
-class LanguagesListFragment : MvpAppCompatFragment(), LanguagesListFragmentView {
+class LanguagesFragment : MvpAppCompatFragment(), LanguagesFragmentView {
 
     @InjectPresenter
     lateinit var languagesListFragmentPresenter: LanguagesListFragmentPresenter
 
     @ProvidePresenter
-    fun providePresenter() = LanguagesListFragment()
+    fun providePresenter() = LanguagesFragment()
 
     companion object {
-        fun getInstance(arg: String): LanguagesListFragment {
-            val fragment = LanguagesListFragment()
+        fun getInstance(arg: String): LanguagesFragment {
+            val fragment = LanguagesFragment()
             val args = Bundle()
             args.putString("arg", arg)
             fragment.setArguments(args)
@@ -31,7 +31,7 @@ class LanguagesListFragment : MvpAppCompatFragment(), LanguagesListFragmentView 
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.fragment_languages_list, container, false)
+        val view = inflater.inflate(R.layout.fragment_languages, container, false)
         return view
     }
 

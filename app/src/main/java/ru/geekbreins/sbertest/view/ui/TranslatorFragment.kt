@@ -5,10 +5,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
+import android.widget.ImageView
 import android.widget.TextView
 import com.arellomobile.mvp.MvpAppCompatFragment
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
+import com.jakewharton.rxbinding2.widget.RxTextView
+import io.reactivex.Observable
 import kotlinx.android.synthetic.main.fragment_translator.*
 import ru.geekbreins.sbertest.R
 import ru.geekbreins.sbertest.presenter.TranslatorFragmentPresenter
@@ -26,6 +30,14 @@ class TranslatorFragment : MvpAppCompatFragment(), TranslatorFragmentView {
 
     private lateinit var mainActivityView: MainActivityView
 
+    private lateinit var translatorFragmentTextViewLanguageOne: TextView
+    private lateinit var translatorFragmentTextViewLanguageTwo: TextView
+    private lateinit var translatorFragmentImageViewReverseLanguageButton: ImageView
+    private lateinit var translatorFragmentEditTextInput: EditText
+    private lateinit var translatorFragmentTextViewOutput: TextView
+
+    private lateinit var observableEditTextChanges: Observable<CharSequence>
+
     companion object {
         fun getInstance(arg: String): TranslatorFragment {
             val fragment = TranslatorFragment()
@@ -38,12 +50,17 @@ class TranslatorFragment : MvpAppCompatFragment(), TranslatorFragmentView {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_translator, container, false)
-        val translatorFragmentTextViewLanguageOne: TextView =
-            view.findViewById(R.id.translator_fragment_text_view_language_1)
+        translatorFragmentTextViewLanguageOne = view.findViewById(R.id.translator_fragment_text_view_language_1)
         translatorFragmentTextViewLanguageOne.setOnClickListener { translatorFragmentPresenter.onLanguageOnePushed() }
-        val translatorFragmentTextViewLanguageTwo: TextView =
-            view.findViewById(R.id.translator_fragment_text_view_language_2)
+        translatorFragmentTextViewLanguageTwo = view.findViewById(R.id.translator_fragment_text_view_language_2)
         translatorFragmentTextViewLanguageTwo.setOnClickListener { translatorFragmentPresenter.onLanguageTwoPushed() }
+        translatorFragmentImageViewReverseLanguageButton =
+            view.findViewById(R.id.translator_fragment_reverse_language_button)
+        translatorFragmentImageViewReverseLanguageButton.setOnClickListener { translatorFragmentPresenter.onReversLanguagePushed() }
+        translatorFragmentEditTextInput = view.findViewById(R.id.translator_fragment_edit_text_input)
+        observableEditTextChanges = RxTextView.textChanges(translatorFragmentEditTextInput)
+        translatorFragmentPresenter.onInputTextChanged(observableEditTextChanges)
+        translatorFragmentTextViewOutput = view.findViewById(R.id.translator_fragment_text_view_output)
         return view
     }
 

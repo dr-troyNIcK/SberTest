@@ -5,7 +5,7 @@ import com.arellomobile.mvp.viewstate.strategy.AddToEndSingleStrategy
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType
 
 @StateStrategyType(AddToEndSingleStrategy::class)
-interface LanguagesListFragmentView : MvpView {
+interface LanguagesFragmentView : MvpView {
     fun updateLanguagesList()
     fun navigateToTranslatorFragment()
 }

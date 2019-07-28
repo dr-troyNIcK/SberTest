@@ -1,12 +1,34 @@
 package ru.geekbreins.sbertest.presenter
 
+import android.annotation.SuppressLint
 import com.arellomobile.mvp.InjectViewState
 import com.arellomobile.mvp.MvpPresenter
 import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import ru.geekbreins.sbertest.model.entities.Languages
+import ru.geekbreins.sbertest.model.repos.TranslatorRepo
 import ru.geekbreins.sbertest.view.TranslatorFragmentView
+import timber.log.Timber
 
 @InjectViewState
 class TranslatorFragmentPresenter : MvpPresenter<TranslatorFragmentView>(), ITranslatorFragmentPresenter {
+
+    private val translatorRepo: TranslatorRepo = TranslatorRepo()
+
+    private val languages: Languages = Languages.instance
+    private var textViewLanguageOneState: String = languages.languagesKeys!![1]
+    private var textViewLanguageTwoState: String = languages.languagesKeys!![0]
+    private var textViewOutputState: String = ""
+
+    init {
+        viewState.setLanguageOneText(textViewLanguageOneState)
+        viewState.setLanguageTwoText(textViewLanguageTwoState)
+    }
+
+    @SuppressLint("CheckResult")
+    override fun onFirstViewAttach() {
+        super.onFirstViewAttach()
+    }
 
     override fun onLanguageOnePushed() {
 //        viewState.navigateToLanguageListFragment()
@@ -17,10 +39,24 @@ class TranslatorFragmentPresenter : MvpPresenter<TranslatorFragmentView>(), ITra
     }
 
     override fun onReversLanguagePushed() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        viewState.setLanguageOneText(textViewLanguageTwoState)
+        viewState.setLanguageTwoText(textViewLanguageOneState)
+
+        val temp: String = textViewLanguageOneState
+        textViewLanguageOneState = textViewLanguageTwoState
+        textViewLanguageTwoState = temp
+
+        viewState.setInputText(textViewOutputState)
     }
 
-    override fun onInputTextChanged(changedText: Observable<String>) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    @SuppressLint("CheckResult")
+    override fun onInputTextChanged(changedText: Observable<CharSequence>) {
+        changedText.subscribe({ text ->
+            translatorRepo.getTranslation(text.toString(), "ru").observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ transition ->
+                    Timber.d(transition.text.toString())
+                    viewState.setOutputText(transition.text[0])
+                }, { e -> Timber.e(e) })
+        }, { e -> Timber.e(e) })
     }
 }

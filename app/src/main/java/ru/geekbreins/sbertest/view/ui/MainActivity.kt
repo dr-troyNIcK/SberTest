@@ -15,7 +15,7 @@ class MainActivity : MvpAppCompatActivity(), MainActivityView {
 
     private lateinit var translatorFragment: TranslatorFragment
     private lateinit var vocabularyFragment: VocabularyFragment
-    private lateinit var languagesListFragment: LanguagesListFragment
+    private lateinit var languagesFragment: LanguagesFragment
 
     @InjectPresenter
     lateinit var mainActivityPresenter: MainActivityPresenter
@@ -29,7 +29,7 @@ class MainActivity : MvpAppCompatActivity(), MainActivityView {
         mainActivityBottomNavigationView = findViewById(R.id.main_activity_bottom_navigation_view)
         translatorFragment = TranslatorFragment.getInstance("arg")
         vocabularyFragment = VocabularyFragment.getInstance("arg")
-        languagesListFragment = LanguagesListFragment.getInstance("arg")
+        languagesFragment = LanguagesFragment.getInstance("arg")
 
         navigateToTranslatorFragment()
 
@@ -63,7 +63,7 @@ class MainActivity : MvpAppCompatActivity(), MainActivityView {
     }
 
     override fun navigateToLanguageListFragment() {
-        supportFragmentManager.beginTransaction().replace(R.id.main_activity_fragment_container, languagesListFragment)
+        supportFragmentManager.beginTransaction().replace(R.id.main_activity_fragment_container, languagesFragment)
             .addToBackStack(null).commit()
     }
 }
