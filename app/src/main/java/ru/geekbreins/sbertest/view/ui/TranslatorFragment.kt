@@ -85,7 +85,7 @@ class TranslatorFragment : MvpAppCompatFragment(), TranslatorFragmentView {
         translator_fragment_text_view_output.text = outputText
     }
 
-    override fun navigateToLanguageListFragment() {
-        mainActivityView.navigateToLanguageListFragment()
+    override fun navigateToLanguageFragment() {
+        mainActivityView.navigateToLanguagesFragment()
     }
 }

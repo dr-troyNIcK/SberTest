@@ -5,7 +5,7 @@ import com.arellomobile.mvp.InjectViewState
 import com.arellomobile.mvp.MvpPresenter
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
-import ru.geekbreins.sbertest.model.entities.Languages
+import ru.geekbreins.sbertest.model.repos.LanguagesRepo
 import ru.geekbreins.sbertest.model.repos.TranslatorRepo
 import ru.geekbreins.sbertest.view.TranslatorFragmentView
 import timber.log.Timber
@@ -15,7 +15,7 @@ class TranslatorFragmentPresenter : MvpPresenter<TranslatorFragmentView>(), ITra
 
     private val translatorRepo: TranslatorRepo = TranslatorRepo()
 
-    private val languages: Languages = Languages.instance
+    private val languages: LanguagesRepo = LanguagesRepo.instance
     private var textViewLanguageOneState: String = languages.languagesKeys!![1]
     private var textViewLanguageTwoState: String = languages.languagesKeys!![0]
     private var textViewOutputState: String = ""
@@ -25,17 +25,16 @@ class TranslatorFragmentPresenter : MvpPresenter<TranslatorFragmentView>(), ITra
         viewState.setLanguageTwoText(textViewLanguageTwoState)
     }
 
-    @SuppressLint("CheckResult")
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
     }
 
     override fun onLanguageOnePushed() {
-//        viewState.navigateToLanguageListFragment()
+        viewState.navigateToLanguageFragment()
     }
 
     override fun onLanguageTwoPushed() {
-//        viewState.navigateToLanguageListFragment()
+        viewState.navigateToLanguageFragment()
     }
 
     override fun onReversLanguagePushed() {
@@ -54,7 +53,6 @@ class TranslatorFragmentPresenter : MvpPresenter<TranslatorFragmentView>(), ITra
         changedText.subscribe({ text ->
             translatorRepo.getTranslation(text.toString(), "ru").observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ transition ->
-                    Timber.d(transition.text.toString())
                     viewState.setOutputText(transition.text[0])
                 }, { e -> Timber.e(e) })
         }, { e -> Timber.e(e) })

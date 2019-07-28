@@ -20,7 +20,7 @@ interface YandexTranslatorAPI {
 
     companion object Factory {
         fun create(): YandexTranslatorAPI {
-            val retrofit = Retrofit.Builder()
+            return Retrofit.Builder()
                 .baseUrl("https://translate.yandex.net/api/v1.5/tr.json/")
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(
@@ -30,7 +30,7 @@ interface YandexTranslatorAPI {
                     )
                 )
                 .build()
-            return retrofit.create(YandexTranslatorAPI::class.java)
+                .create(YandexTranslatorAPI::class.java)
         }
     }
 }

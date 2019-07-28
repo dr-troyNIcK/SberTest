@@ -36,6 +36,13 @@ class MainActivity : MvpAppCompatActivity(), MainActivityView {
         initBottomNavigationView()
     }
 
+    override fun onBackPressed() {
+        when (supportFragmentManager.findFragmentById(R.id.main_activity_fragment_container)) {
+            is LanguagesFragment -> navigateToTranslatorFragment()
+            else -> super.onBackPressed()
+        }
+    }
+
     private fun initBottomNavigationView() {
         mainActivityBottomNavigationView.setOnNavigationItemSelectedListener(BottomNavigationView.OnNavigationItemSelectedListener { item ->
             when (item.itemId) {
@@ -54,16 +61,16 @@ class MainActivity : MvpAppCompatActivity(), MainActivityView {
 
     override fun navigateToTranslatorFragment() {
         supportFragmentManager.beginTransaction().replace(R.id.main_activity_fragment_container, translatorFragment)
-            .addToBackStack(null).commit()
+            .commit()
     }
 
     override fun navigateToVocabularyFragment() {
         supportFragmentManager.beginTransaction().replace(R.id.main_activity_fragment_container, vocabularyFragment)
-            .addToBackStack(null).commit()
+            .commit()
     }
 
-    override fun navigateToLanguageListFragment() {
+    override fun navigateToLanguagesFragment() {
         supportFragmentManager.beginTransaction().replace(R.id.main_activity_fragment_container, languagesFragment)
-            .addToBackStack(null).commit()
+            .commit()
     }
 }
