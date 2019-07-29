@@ -24,14 +24,14 @@ class MainActivity : MvpAppCompatActivity(), MainActivityView {
         setContentView(R.layout.activity_main)
         mainActivityBottomNavigationView = findViewById(R.id.main_activity_bottom_navigation_view)
 
-        navigateToTranslatorFragment("NON", -1)
+        navigateToTranslatorFragment()
 
         initBottomNavigationView()
     }
 
     override fun onBackPressed() {
         when (supportFragmentManager.findFragmentById(R.id.main_activity_fragment_container)) {
-            is LanguagesFragment -> navigateToTranslatorFragment("NON", -1)
+            is LanguagesFragment -> navigateToTranslatorFragment()
             else -> super.onBackPressed()
         }
     }
@@ -52,11 +52,9 @@ class MainActivity : MvpAppCompatActivity(), MainActivityView {
         })
     }
 
-    override fun navigateToTranslatorFragment(numberOfLanguageTextView: String, position: Int) {
-        supportFragmentManager.beginTransaction().replace(
-            R.id.main_activity_fragment_container,
-            TranslatorFragment.getInstance(numberOfLanguageTextView, position)
-        )
+    override fun navigateToTranslatorFragment() {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.main_activity_fragment_container, TranslatorFragment.getInstance("arg"))
             .commit()
     }
 

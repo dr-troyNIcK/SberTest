@@ -66,7 +66,7 @@ class LanguagesFragment : MvpAppCompatFragment(), LanguagesFragmentView {
         languagesRVAdapter.notifyDataSetChanged()
     }
 
-    override fun navigateToTranslatorFragment(numberOfLanguageTextView: String, position: Int) {
-        mainActivityView.navigateToTranslatorFragment(numberOfLanguageTextView, position)
+    override fun navigateToTranslatorFragment() {
+        mainActivityView.navigateToTranslatorFragment()
     }
 }

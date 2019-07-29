@@ -27,9 +27,7 @@ class TranslatorFragment : MvpAppCompatFragment(), TranslatorFragmentView {
 
     @ProvidePresenter
     fun providePresenter(): TranslatorFragmentPresenter {
-        val numberOfLanguage = arguments?.getString(TRANSLATOR_FRAGMENT_TAG1)
-        val position = arguments?.getInt(TRANSLATOR_FRAGMENT_TAG2)
-        return TranslatorFragmentPresenter(numberOfLanguage!!, position!!)
+        return TranslatorFragmentPresenter()
     }
 
     private lateinit var mainActivityView: MainActivityView
@@ -43,16 +41,13 @@ class TranslatorFragment : MvpAppCompatFragment(), TranslatorFragmentView {
     private lateinit var observableEditTextChanges: Observable<CharSequence>
 
     companion object {
-        fun getInstance(numberOfLanguageTextView: String, position: Int): TranslatorFragment {
+        fun getInstance(arg: String): TranslatorFragment {
             val fragment = TranslatorFragment()
             val args = Bundle()
-            args.putString(TRANSLATOR_FRAGMENT_TAG1, numberOfLanguageTextView)
-            args.putInt(TRANSLATOR_FRAGMENT_TAG2, position)
+            args.putString("arg", arg)
             fragment.arguments = args
             return fragment
         }
-        const val TRANSLATOR_FRAGMENT_TAG1: String = "arg1"
-        const val TRANSLATOR_FRAGMENT_TAG2: String = "arg2"
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

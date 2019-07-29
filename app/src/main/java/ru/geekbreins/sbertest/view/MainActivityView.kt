@@ -6,7 +6,7 @@ import com.arellomobile.mvp.viewstate.strategy.StateStrategyType
 
 @StateStrategyType(AddToEndSingleStrategy::class)
 interface MainActivityView : MvpView {
-    fun navigateToTranslatorFragment(numberOfLanguageTextView: String, position: Int)
+    fun navigateToTranslatorFragment()
     fun navigateToVocabularyFragment()
     fun navigateToLanguagesFragment(numberOfLanguageTextView: String)
 }

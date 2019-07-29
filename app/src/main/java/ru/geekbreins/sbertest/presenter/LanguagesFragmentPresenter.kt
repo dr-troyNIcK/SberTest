@@ -5,6 +5,7 @@ import com.arellomobile.mvp.MvpPresenter
 import ru.geekbreins.sbertest.model.repos.LanguagesRepo
 import ru.geekbreins.sbertest.view.LanguagesFragmentView
 import ru.geekbreins.sbertest.view.LanguagesItemView
+import timber.log.Timber
 
 @InjectViewState
 class LanguagesFragmentPresenter(val numberOfLanguageTextView: String) : MvpPresenter<LanguagesFragmentView>() {
@@ -19,7 +20,12 @@ class LanguagesFragmentPresenter(val numberOfLanguageTextView: String) : MvpPres
         }
 
         override fun onLanguageItemViewPushed(position: Int) {
-            viewState.navigateToTranslatorFragment(numberOfLanguageTextView, position)
+            when (numberOfLanguageTextView) {
+                TranslatorFragmentPresenter.LANGUAGE_ONE -> languagesRepo.languageOneState = position
+                TranslatorFragmentPresenter.LANGUAGE_TWO -> languagesRepo.languageTwoState = position
+                else -> (Timber.d("DONTDONTDONT"))
+            }
+            viewState.navigateToTranslatorFragment()
         }
     }
 
