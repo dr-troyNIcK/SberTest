@@ -13,10 +13,6 @@ class MainActivity : MvpAppCompatActivity(), MainActivityView {
 
     private lateinit var mainActivityBottomNavigationView: BottomNavigationView
 
-    private lateinit var translatorFragment: TranslatorFragment
-    private lateinit var vocabularyFragment: VocabularyFragment
-    private lateinit var languagesFragment: LanguagesFragment
-
     @InjectPresenter
     lateinit var mainActivityPresenter: MainActivityPresenter
 
@@ -27,18 +23,15 @@ class MainActivity : MvpAppCompatActivity(), MainActivityView {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         mainActivityBottomNavigationView = findViewById(R.id.main_activity_bottom_navigation_view)
-        translatorFragment = TranslatorFragment.getInstance("arg")
-        vocabularyFragment = VocabularyFragment.getInstance("arg")
-        languagesFragment = LanguagesFragment.getInstance("arg")
 
-        navigateToTranslatorFragment()
+        navigateToTranslatorFragment("NON", -1)
 
         initBottomNavigationView()
     }
 
     override fun onBackPressed() {
         when (supportFragmentManager.findFragmentById(R.id.main_activity_fragment_container)) {
-            is LanguagesFragment -> navigateToTranslatorFragment()
+            is LanguagesFragment -> navigateToTranslatorFragment("NON", -1)
             else -> super.onBackPressed()
         }
     }
@@ -59,18 +52,23 @@ class MainActivity : MvpAppCompatActivity(), MainActivityView {
         })
     }
 
-    override fun navigateToTranslatorFragment() {
-        supportFragmentManager.beginTransaction().replace(R.id.main_activity_fragment_container, translatorFragment)
+    override fun navigateToTranslatorFragment(numberOfLanguageTextView: String, position: Int) {
+        supportFragmentManager.beginTransaction().replace(
+            R.id.main_activity_fragment_container,
+            TranslatorFragment.getInstance(numberOfLanguageTextView, position)
+        )
             .commit()
     }
 
     override fun navigateToVocabularyFragment() {
-        supportFragmentManager.beginTransaction().replace(R.id.main_activity_fragment_container, vocabularyFragment)
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.main_activity_fragment_container, VocabularyFragment.getInstance("arg"))
             .commit()
     }
 
-    override fun navigateToLanguagesFragment() {
-        supportFragmentManager.beginTransaction().replace(R.id.main_activity_fragment_container, languagesFragment)
+    override fun navigateToLanguagesFragment(numberOfLanguageTextView: String) {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.main_activity_fragment_container, LanguagesFragment.getInstance(numberOfLanguageTextView))
             .commit()
     }
 }

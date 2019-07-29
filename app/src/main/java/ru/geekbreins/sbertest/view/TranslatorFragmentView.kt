@@ -10,5 +10,5 @@ interface TranslatorFragmentView : MvpView {
     fun setLanguageTwoText(inputText: String)
     fun setInputText(inputText: String)
     fun setOutputText(outputText: String)
-    fun navigateToLanguageFragment()
+    fun navigateToLanguageFragment(numberOfLanguageTextView: String)
 }

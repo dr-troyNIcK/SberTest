@@ -23,7 +23,9 @@ class LanguagesFragment : MvpAppCompatFragment(), LanguagesFragmentView {
     lateinit var languagesFragmentPresenter: LanguagesFragmentPresenter
 
     @ProvidePresenter
-    fun providePresenter() = LanguagesFragment()
+    fun providePresenter(): LanguagesFragmentPresenter {
+        return LanguagesFragmentPresenter(arguments?.getString(LANGUAGE_FRAGMENT_TAG)!!)
+    }
 
     private lateinit var mainActivityView: MainActivityView
 
@@ -35,10 +37,12 @@ class LanguagesFragment : MvpAppCompatFragment(), LanguagesFragmentView {
         fun getInstance(arg: String): LanguagesFragment {
             val fragment = LanguagesFragment()
             val args = Bundle()
-            args.putString("arg", arg)
-            fragment.setArguments(args)
+            args.putString(LANGUAGE_FRAGMENT_TAG, arg)
+            fragment.arguments = args
             return fragment
         }
+
+        const val LANGUAGE_FRAGMENT_TAG: String = "arg"
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -62,7 +66,7 @@ class LanguagesFragment : MvpAppCompatFragment(), LanguagesFragmentView {
         languagesRVAdapter.notifyDataSetChanged()
     }
 
-    override fun navigateToTranslatorFragment() {
-        mainActivityView.navigateToTranslatorFragment()
+    override fun navigateToTranslatorFragment(numberOfLanguageTextView: String, position: Int) {
+        mainActivityView.navigateToTranslatorFragment(numberOfLanguageTextView, position)
     }
 }

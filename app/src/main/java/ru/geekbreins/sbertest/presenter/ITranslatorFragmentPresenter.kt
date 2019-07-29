@@ -6,5 +6,5 @@ interface ITranslatorFragmentPresenter {
     fun onLanguageOnePushed()
     fun onLanguageTwoPushed()
     fun onReversLanguagePushed()
-    fun onInputTextChanged(changedText: Observable<CharSequence>)
+    fun subscribeOnTextChange(changedText: Observable<CharSequence>)
 }

@@ -11,18 +11,35 @@ import ru.geekbreins.sbertest.view.TranslatorFragmentView
 import timber.log.Timber
 
 @InjectViewState
-class TranslatorFragmentPresenter : MvpPresenter<TranslatorFragmentView>(), ITranslatorFragmentPresenter {
+class TranslatorFragmentPresenter(val numberOfLanguageTextView: String, val position: Int) :
+    MvpPresenter<TranslatorFragmentView>(), ITranslatorFragmentPresenter {
+
+    companion object {
+        const val LANGUAGE_ONE: String = "One"
+        const val LANGUAGE_TWO: String = "Two"
+    }
 
     private val translatorRepo: TranslatorRepo = TranslatorRepo()
-
     private val languages: LanguagesRepo = LanguagesRepo.instance
-    private var textViewLanguageOneState: String = languages.languagesKeys!![1]
-    private var textViewLanguageTwoState: String = languages.languagesKeys!![0]
+
+    private var textViewLanguageOneState: Int = 1
+    private var textViewLanguageTwoState: Int = 0
     private var textViewOutputState: String = ""
 
     init {
-        viewState.setLanguageOneText(textViewLanguageOneState)
-        viewState.setLanguageTwoText(textViewLanguageTwoState)
+        when (numberOfLanguageTextView) {
+            LANGUAGE_ONE -> {
+                textViewLanguageOneState = position
+            }
+            LANGUAGE_TWO -> {
+                textViewLanguageTwoState = position
+            }
+            else->{
+                Timber.d("don't change")
+            }
+        }
+        viewState.setLanguageOneText(languages.languages!![textViewLanguageOneState])
+        viewState.setLanguageTwoText(languages.languages!![textViewLanguageTwoState])
     }
 
     override fun onFirstViewAttach() {
@@ -30,18 +47,18 @@ class TranslatorFragmentPresenter : MvpPresenter<TranslatorFragmentView>(), ITra
     }
 
     override fun onLanguageOnePushed() {
-        viewState.navigateToLanguageFragment()
+        viewState.navigateToLanguageFragment(LANGUAGE_ONE)
     }
 
     override fun onLanguageTwoPushed() {
-        viewState.navigateToLanguageFragment()
+        viewState.navigateToLanguageFragment(LANGUAGE_TWO)
     }
 
     override fun onReversLanguagePushed() {
-        viewState.setLanguageOneText(textViewLanguageTwoState)
-        viewState.setLanguageTwoText(textViewLanguageOneState)
+        viewState.setLanguageOneText(languages.languages!![textViewLanguageTwoState])
+        viewState.setLanguageTwoText(languages.languages!![textViewLanguageOneState])
 
-        val temp: String = textViewLanguageOneState
+        val temp: Int = textViewLanguageOneState
         textViewLanguageOneState = textViewLanguageTwoState
         textViewLanguageTwoState = temp
 
@@ -49,12 +66,19 @@ class TranslatorFragmentPresenter : MvpPresenter<TranslatorFragmentView>(), ITra
     }
 
     @SuppressLint("CheckResult")
-    override fun onInputTextChanged(changedText: Observable<CharSequence>) {
+    override fun subscribeOnTextChange(changedText: Observable<CharSequence>) {
         changedText.subscribe({ text ->
-            translatorRepo.getTranslation(text.toString(), "ru").observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ transition ->
-                    viewState.setOutputText(transition.text[0])
-                }, { e -> Timber.e(e) })
+            if (text.toString() == "") {
+                viewState.setOutputText("")
+                textViewOutputState = ""
+            } else {
+                translatorRepo.getTranslation(text.toString(), languages.languagesKeys!![textViewLanguageTwoState])
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe({ transition ->
+                        viewState.setOutputText(transition.text[0])
+                        textViewOutputState = transition.text[0]
+                    }, { e -> Timber.e(e) })
+            }
         }, { e -> Timber.e(e) })
     }
 }

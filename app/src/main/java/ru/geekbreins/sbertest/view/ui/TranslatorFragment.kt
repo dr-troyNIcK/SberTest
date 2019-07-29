@@ -26,7 +26,11 @@ class TranslatorFragment : MvpAppCompatFragment(), TranslatorFragmentView {
     lateinit var translatorFragmentPresenter: TranslatorFragmentPresenter
 
     @ProvidePresenter
-    fun providePresenter() = TranslatorFragmentPresenter()
+    fun providePresenter(): TranslatorFragmentPresenter {
+        val numberOfLanguage = arguments?.getString(TRANSLATOR_FRAGMENT_TAG1)
+        val position = arguments?.getInt(TRANSLATOR_FRAGMENT_TAG2)
+        return TranslatorFragmentPresenter(numberOfLanguage!!, position!!)
+    }
 
     private lateinit var mainActivityView: MainActivityView
 
@@ -39,13 +43,16 @@ class TranslatorFragment : MvpAppCompatFragment(), TranslatorFragmentView {
     private lateinit var observableEditTextChanges: Observable<CharSequence>
 
     companion object {
-        fun getInstance(arg: String): TranslatorFragment {
+        fun getInstance(numberOfLanguageTextView: String, position: Int): TranslatorFragment {
             val fragment = TranslatorFragment()
             val args = Bundle()
-            args.putString("arg", arg)
+            args.putString(TRANSLATOR_FRAGMENT_TAG1, numberOfLanguageTextView)
+            args.putInt(TRANSLATOR_FRAGMENT_TAG2, position)
             fragment.arguments = args
             return fragment
         }
+        const val TRANSLATOR_FRAGMENT_TAG1: String = "arg1"
+        const val TRANSLATOR_FRAGMENT_TAG2: String = "arg2"
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -59,7 +66,7 @@ class TranslatorFragment : MvpAppCompatFragment(), TranslatorFragmentView {
         translatorFragmentImageViewReverseLanguageButton.setOnClickListener { translatorFragmentPresenter.onReversLanguagePushed() }
         translatorFragmentEditTextInput = view.findViewById(R.id.translator_fragment_edit_text_input)
         observableEditTextChanges = RxTextView.textChanges(translatorFragmentEditTextInput)
-        translatorFragmentPresenter.onInputTextChanged(observableEditTextChanges)
+        translatorFragmentPresenter.subscribeOnTextChange(observableEditTextChanges)
         translatorFragmentTextViewOutput = view.findViewById(R.id.translator_fragment_text_view_output)
         return view
     }
@@ -85,7 +92,7 @@ class TranslatorFragment : MvpAppCompatFragment(), TranslatorFragmentView {
         translator_fragment_text_view_output.text = outputText
     }
 
-    override fun navigateToLanguageFragment() {
-        mainActivityView.navigateToLanguagesFragment()
+    override fun navigateToLanguageFragment(numberOfLanguageTextView: String) {
+        mainActivityView.navigateToLanguagesFragment(numberOfLanguageTextView)
     }
 }

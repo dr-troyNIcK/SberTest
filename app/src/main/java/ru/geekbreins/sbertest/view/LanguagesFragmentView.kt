@@ -7,5 +7,5 @@ import com.arellomobile.mvp.viewstate.strategy.StateStrategyType
 @StateStrategyType(AddToEndSingleStrategy::class)
 interface LanguagesFragmentView : MvpView {
     fun updateLanguagesList()
-    fun navigateToTranslatorFragment()
+    fun navigateToTranslatorFragment(numberOfLanguageTextView: String, position: Int)
 }

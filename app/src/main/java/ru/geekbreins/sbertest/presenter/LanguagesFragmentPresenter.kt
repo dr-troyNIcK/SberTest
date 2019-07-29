@@ -7,7 +7,7 @@ import ru.geekbreins.sbertest.view.LanguagesFragmentView
 import ru.geekbreins.sbertest.view.LanguagesItemView
 
 @InjectViewState
-class LanguagesFragmentPresenter : MvpPresenter<LanguagesFragmentView>() {
+class LanguagesFragmentPresenter(val numberOfLanguageTextView: String) : MvpPresenter<LanguagesFragmentView>() {
 
     inner class LanguagesRVPresenter : ILanguagesRVPresenter {
         override fun getLanguagesCount(): Int {
@@ -19,7 +19,7 @@ class LanguagesFragmentPresenter : MvpPresenter<LanguagesFragmentView>() {
         }
 
         override fun onLanguageItemViewPushed(position: Int) {
-            viewState.navigateToTranslatorFragment()
+            viewState.navigateToTranslatorFragment(numberOfLanguageTextView, position)
         }
     }
 

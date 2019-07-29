@@ -8,7 +8,7 @@ import ru.geekbreins.sbertest.view.MainActivityView
 class MainActivityPresenter : MvpPresenter<MainActivityView>(), IMainActivityPresenter {
 
     override fun onTranslatorTabPushed() {
-        viewState.navigateToTranslatorFragment()
+        viewState.navigateToTranslatorFragment("NON",-1)
     }
 
     override fun onVocabularyTabPushed() {
