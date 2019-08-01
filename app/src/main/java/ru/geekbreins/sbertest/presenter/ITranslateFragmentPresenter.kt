@@ -2,7 +2,7 @@ package ru.geekbreins.sbertest.presenter
 
 import io.reactivex.Observable
 
-interface ITranslatorFragmentPresenter {
+interface ITranslateFragmentPresenter {
     fun onLanguageOnePushed()
     fun onLanguageTwoPushed()
     fun onReversLanguagePushed()

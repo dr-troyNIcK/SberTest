@@ -15,19 +15,19 @@ import com.jakewharton.rxbinding2.widget.RxTextView
 import io.reactivex.Observable
 import kotlinx.android.synthetic.main.fragment_translator.*
 import ru.geekbreins.sbertest.R
-import ru.geekbreins.sbertest.presenter.TranslatorFragmentPresenter
+import ru.geekbreins.sbertest.presenter.TranslateFragmentPresenter
 import ru.geekbreins.sbertest.view.MainActivityView
-import ru.geekbreins.sbertest.view.TranslatorFragmentView
+import ru.geekbreins.sbertest.view.TranslateFragmentView
 
 
-class TranslatorFragment : MvpAppCompatFragment(), TranslatorFragmentView {
+class TranslateFragment : MvpAppCompatFragment(), TranslateFragmentView {
 
     @InjectPresenter
-    lateinit var translatorFragmentPresenter: TranslatorFragmentPresenter
+    lateinit var translatorFragmentPresenter: TranslateFragmentPresenter
 
     @ProvidePresenter
-    fun providePresenter(): TranslatorFragmentPresenter {
-        return TranslatorFragmentPresenter()
+    fun providePresenter(): TranslateFragmentPresenter {
+        return TranslateFragmentPresenter()
     }
 
     private lateinit var mainActivityView: MainActivityView
@@ -41,8 +41,8 @@ class TranslatorFragment : MvpAppCompatFragment(), TranslatorFragmentView {
     private lateinit var observableEditTextChanges: Observable<CharSequence>
 
     companion object {
-        fun getInstance(arg: String): TranslatorFragment {
-            val fragment = TranslatorFragment()
+        fun getInstance(arg: String): TranslateFragment {
+            val fragment = TranslateFragment()
             val args = Bundle()
             args.putString("arg", arg)
             fragment.arguments = args

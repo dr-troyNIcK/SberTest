@@ -54,7 +54,7 @@ class MainActivity : MvpAppCompatActivity(), MainActivityView {
 
     override fun navigateToTranslatorFragment() {
         supportFragmentManager.beginTransaction()
-            .replace(R.id.main_activity_fragment_container, TranslatorFragment.getInstance("arg"))
+            .replace(R.id.main_activity_fragment_container, TranslateFragment.getInstance("arg"))
             .commit()
     }
 
