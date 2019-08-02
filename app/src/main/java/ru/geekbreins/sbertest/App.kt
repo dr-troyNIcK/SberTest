@@ -1,6 +1,7 @@
 package ru.geekbreins.sbertest
 
 import android.app.Application
+import ru.geekbreins.sbertest.model.local.roomDB.RoomApplicationDB
 import timber.log.Timber
 
 class App : Application() {
@@ -13,6 +14,7 @@ class App : Application() {
         super.onCreate()
         instance = this
         Timber.plant(Timber.DebugTree())
+        RoomApplicationDB.create(this)
     }
 
 }

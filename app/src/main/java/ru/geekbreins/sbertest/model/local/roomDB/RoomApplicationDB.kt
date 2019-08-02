@@ -15,7 +15,15 @@ abstract class RoomApplicationDB : RoomDatabase() {
         private var instance: RoomApplicationDB? = null
 
         @Synchronized
-        fun create(context: Context): RoomApplicationDB? {
+        fun getInstance(): RoomApplicationDB? {
+            if (instance == null) {
+                throw RuntimeException("Room DB not created")
+            } else {
+                return instance
+            }
+        }
+
+        fun create(context: Context) {
             if (instance == null) {
                 instance = Room.databaseBuilder<RoomApplicationDB>(
                     context,
@@ -23,7 +31,7 @@ abstract class RoomApplicationDB : RoomDatabase() {
                     "RoomApplicationDB.db"
                 ).build()
             }
-            return instance
+
         }
 
     }
