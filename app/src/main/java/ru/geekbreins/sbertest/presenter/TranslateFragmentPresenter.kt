@@ -18,8 +18,7 @@ class TranslateFragmentPresenter : MvpPresenter<TranslateFragmentView>(), ITrans
         const val LANGUAGE_TWO: String = "Two"
     }
 
-    private val yandexTranslateRepo: YandexTranslateRepo =
-        YandexTranslateRepo()
+    private val yandexTranslateRepo: YandexTranslateRepo = YandexTranslateRepo()
     private val languages: LanguagesRepo = LanguagesRepo.instance
 
     private var textViewOutputState: String = ""
@@ -61,7 +60,7 @@ class TranslateFragmentPresenter : MvpPresenter<TranslateFragmentView>(), ITrans
             } else {
                 yandexTranslateRepo.getTranslation(
                     text.toString(),
-                    languages.languagesKeys!![languages.languageTwoState]
+                    languages.languagesKeys[languages.languageTwoState]
                 )
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe({ transition ->

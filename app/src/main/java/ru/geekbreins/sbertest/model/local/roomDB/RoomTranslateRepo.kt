@@ -1,11 +1,14 @@
 package ru.geekbreins.sbertest.model.local.roomDB
 
+import io.reactivex.Completable
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 
 class RoomTranslateRepo {
     fun insertTranslateEntity(roomTranslateEntity: RoomTranslateEntity) {
-        RoomApplicationDB.getInstance()?.roomTranslateDAO()?.insert(roomTranslateEntity)
+        Completable.fromAction {
+            RoomApplicationDB.getInstance()?.roomTranslateDAO()?.insert(roomTranslateEntity)
+        }.subscribeOn(Schedulers.io()).subscribe()
     }
 
     fun getAllTranslateEntities(): Single<List<RoomTranslateEntity>> {
@@ -16,6 +19,9 @@ class RoomTranslateRepo {
     }
 
     fun deleteAllTranslateEntities() {
-        RoomApplicationDB.getInstance()?.roomTranslateDAO()?.deleteAllTranslateEntities()
+        Completable.fromAction {
+            RoomApplicationDB.getInstance()?.roomTranslateDAO()?.deleteAllTranslateEntities()
+        }.subscribeOn(Schedulers.io()).subscribe()
+
     }
 }
