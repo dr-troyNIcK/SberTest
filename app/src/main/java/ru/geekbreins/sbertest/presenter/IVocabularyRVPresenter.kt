@@ -1,5 +1,9 @@
 package ru.geekbreins.sbertest.presenter
 
-interface IVocabularyRVPresenter {
+import ru.geekbreins.sbertest.view.VocabularyItemView
 
+interface IVocabularyRVPresenter {
+    fun getVocabularyCount(): Int
+    fun bindView(view: VocabularyItemView)
+    fun onVocabularyItemViewPushed(position: Int)
 }
