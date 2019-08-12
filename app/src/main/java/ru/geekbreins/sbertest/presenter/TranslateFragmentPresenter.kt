@@ -19,13 +19,13 @@ class TranslateFragmentPresenter : MvpPresenter<TranslateFragmentView>(), ITrans
     }
 
     private val yandexTranslateRepo: YandexTranslateRepo = YandexTranslateRepo()
-    private val languages: LanguagesRepo = LanguagesRepo.instance
-
-    private var textViewOutputState: String = ""
+    private val languagesRepo: LanguagesRepo = LanguagesRepo.getInstance()
 
     init {
-        viewState.setLanguageOneText(languages.languages[languages.languageOneState])
-        viewState.setLanguageTwoText(languages.languages[languages.languageTwoState])
+        viewState.setLanguageOneText(languagesRepo.languages[languagesRepo.languageOneState])
+        viewState.setLanguageTwoText(languagesRepo.languages[languagesRepo.languageTwoState])
+        viewState.setInputText(languagesRepo.inputTextState)
+        viewState.setOutputText(languagesRepo.outputTextState)
     }
 
     override fun onFirstViewAttach() {
@@ -41,31 +41,40 @@ class TranslateFragmentPresenter : MvpPresenter<TranslateFragmentView>(), ITrans
     }
 
     override fun onReversLanguagePushed() {
-        viewState.setLanguageOneText(languages.languages[languages.languageTwoState])
-        viewState.setLanguageTwoText(languages.languages[languages.languageOneState])
+        viewState.setLanguageOneText(languagesRepo.languages[languagesRepo.languageTwoState])
+        viewState.setLanguageTwoText(languagesRepo.languages[languagesRepo.languageOneState])
 
-        val temp: Int = languages.languageOneState
-        languages.languageOneState = languages.languageTwoState
-        languages.languageTwoState = temp
+        val tempLanguage: Int = languagesRepo.languageOneState
+        languagesRepo.languageOneState = languagesRepo.languageTwoState
+        languagesRepo.languageTwoState = tempLanguage
 
-        viewState.setInputText(textViewOutputState)
+        viewState.setInputText(languagesRepo.outputTextState)
+        viewState.setOutputText(languagesRepo.inputTextState)
+
+        val tempText: String = languagesRepo.inputTextState
+        languagesRepo.inputTextState = languagesRepo.outputTextState
+        languagesRepo.outputTextState = tempText
     }
 
     @SuppressLint("CheckResult")
     override fun subscribeOnTextChange(changedText: Observable<CharSequence>) {
         changedText.subscribe({ text ->
             if (text.toString() == "") {
+//                viewState.setInputText("")
                 viewState.setOutputText("")
-                textViewOutputState = ""
+                languagesRepo.inputTextState = ""
+                languagesRepo.outputTextState = ""
             } else {
                 yandexTranslateRepo.getTranslation(
                     text.toString(),
-                    languages.languagesKeys[languages.languageTwoState]
+                    languagesRepo.languagesKeys[languagesRepo.languageTwoState]
                 )
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe({ transition ->
+                        //                        viewState.setInputText(text.toString())
                         viewState.setOutputText(transition.text[0])
-                        textViewOutputState = transition.text[0]
+                        languagesRepo.inputTextState = text.toString()
+                        languagesRepo.outputTextState = transition.text[0]
                     }, { e -> Timber.e(e) })
             }
         }, { e -> Timber.e(e) })

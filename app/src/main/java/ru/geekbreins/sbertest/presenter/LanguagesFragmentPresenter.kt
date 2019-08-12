@@ -21,8 +21,14 @@ class LanguagesFragmentPresenter(val numberOfLanguageTextView: String) : MvpPres
 
         override fun onLanguageItemViewPushed(position: Int) {
             when (numberOfLanguageTextView) {
-                TranslateFragmentPresenter.LANGUAGE_ONE -> languagesRepo.languageOneState = position
-                TranslateFragmentPresenter.LANGUAGE_TWO -> languagesRepo.languageTwoState = position
+                TranslateFragmentPresenter.LANGUAGE_ONE -> {
+                    languagesRepo.languageOneState = position
+                    languagesRepo.inputTextState = ""
+                    languagesRepo.outputTextState = ""
+                }
+                TranslateFragmentPresenter.LANGUAGE_TWO -> {
+                    languagesRepo.languageTwoState = position
+                }
                 else -> (Timber.d("DONTDONTDONT"))
             }
             viewState.navigateToTranslatorFragment()
@@ -30,7 +36,7 @@ class LanguagesFragmentPresenter(val numberOfLanguageTextView: String) : MvpPres
     }
 
     val languagesRVPresenter = LanguagesRVPresenter()
-    val languagesRepo: LanguagesRepo = LanguagesRepo.instance
+    val languagesRepo: LanguagesRepo = LanguagesRepo.getInstance()
 
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()

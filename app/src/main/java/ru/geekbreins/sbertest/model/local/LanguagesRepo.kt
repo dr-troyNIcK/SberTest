@@ -8,10 +8,20 @@ class LanguagesRepo private constructor() {
     @Volatile
     var languageTwoState: Int = 0
 
+    @Volatile
+    var inputTextState: String = ""
+    @Volatile
+    var outputTextState: String = ""
+
     val languages: ArrayList<String> = ArrayList(Arrays.asList("Русский", "English", "العربية"))
     val languagesKeys: ArrayList<String> = ArrayList(Arrays.asList("ru", "en", "ar"))
 
     companion object {
-        val instance = LanguagesRepo()
+        private val instance = LanguagesRepo()
+
+        @Synchronized
+        fun getInstance(): LanguagesRepo {
+            return instance
+        }
     }
 }
